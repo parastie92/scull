@@ -9,17 +9,17 @@ int main() {
 	char *buf1 = "Hello";
 	char *buf2;
 
-	if((fd = open("/dev/sbulla",O_RDWR)) < 0) {
+	if((fd = open("/dev/scull0",O_RDWR)) < 0) {
 	    perror("open error");
 		exit(1);
 	}
 	
-	if(write(fd, buf1, 5) < 0) {
+/*	if(write(fd, buf1, 5) < 0) {
 		perror("write error");
 		exit(1);
 	}
 
-	if((fd = open("/dev/sbulla",O_RDWR)) < 0) {
+	if((fd = open("/dev/scull0",O_RDWR)) < 0) {
 	    perror("open error");
 		exit(1);
 	}
@@ -32,7 +32,7 @@ int main() {
 	}
 	
 	printf("buf2 : %s\n", buf2);
-	
+*/	
 	close(fd);
 
 	return 0;
