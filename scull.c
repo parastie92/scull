@@ -17,7 +17,7 @@
 
 #include <asm/uaccess.h>	/* copy_*_user */
 
-#include "scull.h"		/* local definitions */
+#include "scull.h"			/* local definitions */
 
 /*
  * Our parameters which can be set at load time.
@@ -25,7 +25,7 @@
 
 int scull_major =   SCULL_MAJOR;
 int scull_minor =   0;
-int scull_nr_devs = SCULL_NR_DEVS;		/* number of bare scull devices */
+int scull_nr_devs = SCULL_NR_DEVS;			/* number of bare scull devices */
 int scull_quantum = SCULL_QUANTUM;
 int scull_qset =    SCULL_QSET;
 
@@ -77,10 +77,7 @@ int scull_open(struct inode *inode, struct file *filp) {
 
 	/* now trim to 0 the length of the device if open was write-only */
 	if ( (filp->f_flags & O_ACCMODE) == O_WRONLY) {
-		if (mutex_lock_interruptible(&dev->mut))
-			return -ERESTARTSYS;
 		scull_trim(dev); /* ignore errors */
-		mutex_unlock(&dev->mut);
 	}
 
 	printk("scull_open\n");
@@ -399,7 +396,6 @@ void scull_cleanup_module(void) {
 	unregister_chrdev_region(devno, scull_nr_devs);
 }
 
-
 /*
  * Set up the char_dev structure for this device.
  */
@@ -419,10 +415,7 @@ int scull_init_module(void) {
 	int result, i;
 	dev_t dev = 0;
 
-/*
- * Get a range of minor numbers to work with, asking for a dynamic
- * major unless directed otherwise at load time.
- */
+	/* device number */
 	if (scull_major) {
 		dev = MKDEV(scull_major, scull_minor);
 		result = register_chrdev_region(dev, scull_nr_devs, "scull");
@@ -436,7 +429,7 @@ int scull_init_module(void) {
 		return result;
 	}
 
-        /* 
+    /* 
 	 * allocate the devices -- we can't have them static, as the number
 	 * can be specified at load time
 	 */
@@ -451,7 +444,7 @@ int scull_init_module(void) {
 	for (i = 0; i < scull_nr_devs; i++) {
 		scull_devices[i].quantum = scull_quantum;
 		scull_devices[i].qset = scull_qset;
-		mutex_init(&scull_devices[i].mut);
+//		mutex_init(&scull_devices[i].mut);
 		scull_setup_cdev(&scull_devices[i], i);
 	}
 

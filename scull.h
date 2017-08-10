@@ -80,7 +80,7 @@ struct scull_dev {
 	unsigned long size;       /* amount of data stored here */
 	unsigned int access_key;  /* used by sculluid and scullpriv */
 	struct mutex mut;         /* used to make the code atomic*/
-	struct cdev cdev;	  /* Char device structure		*/
+	struct cdev cdev;		  /* Char device structure		*/
 };
 
 /*
@@ -99,19 +99,14 @@ extern int scull_quantum;
 extern int scull_qset;
 
 int     scull_trim(struct scull_dev *dev);
-
 ssize_t scull_read(struct file *filp, char __user *buf, size_t count,
                    loff_t *f_pos);
 ssize_t scull_write(struct file *filp, const char __user *buf, size_t count,
                     loff_t *f_pos);
 loff_t  scull_llseek(struct file *filp, loff_t off, int whence);
-long     scull_ioctl(struct file *filp,
+long    scull_ioctl(struct file *filp,
                     unsigned int cmd, unsigned long arg);
 
-
-/*
- * Ioctl definitions
- */
 
 /* Use 'k' as magic number */
 #define SCULL_IOC_MAGIC  'k'
